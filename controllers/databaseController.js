@@ -19,6 +19,8 @@ const relations = require('../models/relations')(sequelize);
 
 // TESTING
 
+
+
 (async () => {
     await sequelize.sync({ force: true });
 
@@ -30,3 +32,7 @@ const relations = require('../models/relations')(sequelize);
     transaction.setSender(ted);
     transaction.setReceiver(bob);
 })();
+
+
+
+module.exports = { User, Transaction };

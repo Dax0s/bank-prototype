@@ -9,6 +9,9 @@ module.exports = (sequelize) => {
             primaryKey: true,
             defaultValue: DataTypes.UUIDV1
         },
+        token: {
+            type: DataTypes.STRING(1000)
+        },
         first_name: {
             type: DataTypes.STRING(100),
             allowNull: false
@@ -25,7 +28,8 @@ module.exports = (sequelize) => {
         },
         email: {
             type: DataTypes.STRING(255),
-            allowNull: false,
+            unique: true,
+            allowNull: false
         },
         password: {
             type: DataTypes.STRING(100),
