@@ -3,11 +3,11 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
     const Transaction = sequelize.define('transaction', {
         id: {
-            type: DataTypes.BIGINT.UNSIGNED,
+            type: DataTypes.UUID,
             allowNull: false,
             unique: true,
             primaryKey: true,
-            autoIncrement: true
+            defaultValue: DataTypes.UUIDV1
         },
         transaction_amount: {
             type: DataTypes.DECIMAL(19, 4),
@@ -19,4 +19,6 @@ module.exports = (sequelize) => {
             defaultValue: DataTypes.NOW
         }
     });
+
+    return Transaction;
 };

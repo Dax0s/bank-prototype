@@ -12,10 +12,21 @@ const sequelize = new Sequelize(DB, DB_USERNAME, PASSWORD, {
     dialect: 'mysql'
 });
 
-sequelize.authenticate()
-.then(() => {
-    console.log('Connection has been established successfully.');
-})
-.catch(error => {
-    console.error('Unable to connect to the database:', error);
-});
+const User = require('../models/user')(sequelize);
+const Transaction = require('../models/transaction')(sequelize);
+
+const relations = require('../models/relations')(sequelize);
+
+// TESTING
+
+(async () => {
+    await sequelize.sync({ force: true });
+
+    const ted = await User.create({ first_name: 'Ted', last_name: 'Shroom', email: 'shroomted@gmail.com', password: 'testpassword' });
+    const bob = await User.create({ first_name: 'Bob', last_name: 'Cena', email: 'bobthebob@gmail.com', password: 'testpassword' });
+
+    const transaction = await Transaction.create({ transaction_amount: 1 });
+
+    transaction.setSender(ted);
+    transaction.setReceiver(bob);
+})();
