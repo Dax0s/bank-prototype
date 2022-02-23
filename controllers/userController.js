@@ -1,6 +1,9 @@
+const { User } = require('./databaseController');
+
 const bcrypt = require('bcryptjs/dist/bcrypt');
 const jwt = require('jsonwebtoken');
-const { User } = require('./databaseController');
+
+require('dotenv').config();
 
 exports.registerGet = (req, res, next) => {
     res.status(200).send('Page not yet created');
@@ -31,12 +34,11 @@ exports.registerPost = async (req, res, next) => {
 
         const token = jwt.sign(
             { user_id: user.id, email },
-            process.env.TOKEN_KEY,
+            process.env.JWT_SECRET,
             {
-                expiresIn: '2h'
+                expiresIn: process.env.JWT_EXPIRES_IN
             }
         );
-        console.log(token);
         user.token = token;
 
         await user.save();
@@ -51,6 +53,34 @@ exports.loginGet = (req, res, next) => {
     res.status(200).send('Page not yet created');
 }
 
-exports.loginPost = (req, res, next) => {
-    res.status(200).send('Page not yet created');
+exports.loginPost = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!(email && password)) {
+            res.status(400).send('All input is required');
+        }
+
+        const user = await User.findOne({ where: { email: email }});
+
+        if (user && (await bcrypt.compare(password, user.password))) {
+            const token = jwt.sign(
+                { user_id: user.id, email },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: process.env.JWT_EXPIRES_IN
+                }
+            );
+
+            user.token = token;
+
+            await user.save();
+
+            return res.status(200).json(user);
+        }
+
+        res.status(400).send('Invalid credentials');
+    } catch(err) {
+        console.log(err);
+    }
 }

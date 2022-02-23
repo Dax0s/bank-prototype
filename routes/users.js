@@ -3,9 +3,11 @@ const router = express.Router();
 
 const userController = require('../controllers/userController');
 
+const auth = require('../middleware/auth');
+
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.redirect('/users/register');
+router.get('/', auth.verifyToken, (req, res, next) => {
+    res.status(200).send(`Welcome ${req.user.email}`);
 });
 
 router.get('/register', userController.registerGet);
