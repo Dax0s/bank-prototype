@@ -9,9 +9,6 @@ module.exports = (sequelize) => {
             primaryKey: true,
             defaultValue: DataTypes.UUIDV1
         },
-        token: {
-            type: DataTypes.STRING(1000)
-        },
         first_name: {
             type: DataTypes.STRING(100),
             allowNull: false

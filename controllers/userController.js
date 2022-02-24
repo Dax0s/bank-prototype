@@ -2,13 +2,16 @@ const { User } = require('./databaseController');
 
 const bcrypt = require('bcryptjs/dist/bcrypt');
 const jwt = require('jsonwebtoken');
+const { header } = require('express/lib/request');
 
 require('dotenv').config();
 
+// GET request for creating an account
 exports.registerGet = (req, res, next) => {
     res.status(200).send('Page not yet created');
 }
 
+// POST request for creating an account
 exports.registerPost = async (req, res, next) => {
     try {
         const { firstName, lastName, email, password } = req.body;
@@ -39,9 +42,7 @@ exports.registerPost = async (req, res, next) => {
                 expiresIn: process.env.JWT_EXPIRES_IN
             }
         );
-        user.token = token;
-
-        await user.save();
+        res.cookie('token', token, { httpOnly: true });
 
         res.status(201).json(user);
     } catch (err) {
@@ -49,10 +50,12 @@ exports.registerPost = async (req, res, next) => {
     }
 }
 
+// GET request for loging into an existing account
 exports.loginGet = (req, res, next) => {
     res.status(200).send('Page not yet created');
 }
 
+// POST request for loging into an existing account
 exports.loginPost = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -71,10 +74,7 @@ exports.loginPost = async (req, res, next) => {
                     expiresIn: process.env.JWT_EXPIRES_IN
                 }
             );
-
-            user.token = token;
-
-            await user.save();
+            res.cookie('token', token, { httpOnly: true });
 
             return res.status(200).json(user);
         }
