@@ -6,9 +6,7 @@ const userController = require('../controllers/userController');
 const auth = require('../middleware/auth');
 
 /* GET users listing. */
-router.get('/', auth.verifyToken, (req, res, next) => {
-    res.status(200).send(`Welcome ${req.user.email}`);
-});
+router.get('/', auth.verifyToken, userController.indexPage);
 
 router.get('/register', userController.registerGet);
 router.post('/register', userController.registerPost);

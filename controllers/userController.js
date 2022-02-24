@@ -2,19 +2,25 @@ const { User } = require('./databaseController');
 
 const bcrypt = require('bcryptjs/dist/bcrypt');
 const jwt = require('jsonwebtoken');
-const { header } = require('express/lib/request');
 
 require('dotenv').config();
 
+exports.indexPage = (req, res, next) => {
+    res.render('index', { title: 'Express', email: req.user.email });
+};
+
 // GET request for creating an account
 exports.registerGet = (req, res, next) => {
-    res.status(200).send('Page not yet created');
+    res.status(200).render('register', { title: 'Register' });
 }
 
 // POST request for creating an account
 exports.registerPost = async (req, res, next) => {
     try {
-        const { firstName, lastName, email, password } = req.body;
+        let { firstName, lastName, email, password } = req.body;
+
+        firstName = 'none';
+        lastName = 'none';
 
         if (!(firstName && lastName && email && password)) {
             res.status(400).send('All inputs are required');
