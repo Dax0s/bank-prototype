@@ -1,14 +1,24 @@
 {
-  "name": "backend",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
-  "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "morgan": "~1.9.1"
-  }
+    "name": "bank-prototype",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node ./bin/www",
+        "devstart": "nodemon ./bin/www",
+        "serverstart": "DEBUG=myapp:* npm start"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "cookie-parser": "~1.4.4",
+        "debug": "~2.6.9",
+        "dotenv": "^16.0.0",
+        "express": "~4.16.1",
+        "express-validator": "^6.14.0",
+        "http-errors": "~1.6.3",
+        "jsonwebtoken": "^8.5.1",
+        "morgan": "~1.9.1",
+        "mysql2": "^2.3.3",
+        "pug": "2.0.0-beta11",
+        "sequelize": "^6.16.2"
+    }
 }
