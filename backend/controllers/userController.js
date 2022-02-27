@@ -8,7 +8,7 @@ require('dotenv').config();
 
 exports.indexPage = (req, res, next) => {
     res.render('index', { title: 'Express', email: req.user.email });
-};
+}
 
 // GET request for creating an account
 exports.registerGet = (req, res, next) => {
@@ -104,6 +104,19 @@ exports.loginPost = [
 
 // GET request for getting a user
 exports.userGet = async (req, res, next) => {
-    console.log(req.user);
+    const user = await User.findOne({ where: { email: req.user.email }});
+
+    req.user.balance = user.balance;
+
     res.status(200).json({ statusCode: 200, user: req.user });
+}
+
+// POST request for logging out a user
+exports.logoutPost = (req, res, next) => {
+    try {
+        res.clearCookie('token');
+        res.status(200).json({ statusCode: 200});
+    } catch (err) {
+        console.log(err);
+    }
 }

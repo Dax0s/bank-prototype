@@ -17,7 +17,7 @@ const Register = () => {
             return alert('Password and confirm password do not match');
         }
 
-        const res = await fetch('/api/users/register', {
+        const res = await fetch('/api/user/register', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -26,14 +26,14 @@ const Register = () => {
         });
 
         if (res.status === 201) {
-            navigate('/users');
+            navigate('/user');
         }
     }
 
     return (
         <div className='container'>
             <h1>Registration</h1>
-            <form method='POST' action='/api/users/register' onSubmit={onSubmit}>
+            <form onSubmit={onSubmit}>
                 <div>
                     <label htmlFor='firstName'>Name: </label>
                     <input type='text' value={firstName} placeholder='Name' name='firstName' onChange={e => setName(e.target.value)}></input>

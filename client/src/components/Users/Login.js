@@ -10,7 +10,7 @@ const Login = () => {
     async function onSubmit(e) {
         e.preventDefault();
 
-        const res = await fetch('/api/users/login', {
+        const res = await fetch('/api/user/login', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -19,13 +19,13 @@ const Login = () => {
         });
 
         if (res.status === 200) {
-            navigate('/users');
+            navigate('/user');
         }
     }
 
     return (
         <div className='container'>
-            <h1>Registration</h1>
+            <h1>Login</h1>
             <form onSubmit={onSubmit}>
                 <div>
                     <label htmlFor='email'>Email: </label>

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
-exports.verifyToken = (req, res, next) => {
+module.exports = (req, res, next) => {
     const token = req.headers['x-access-token'] || req.cookies.token;
 
     if (!token) {
@@ -19,4 +19,4 @@ exports.verifyToken = (req, res, next) => {
     }
 
     return next();
-};
+}
