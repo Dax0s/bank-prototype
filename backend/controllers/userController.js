@@ -23,7 +23,6 @@ exports.registerPost = [
     body('password', 'Password must be at least 8 characters in length').isLength({ min: 8 }).escape(),
 
     async (req, res, next) => {
-        console.log('Register');
         try {
             const { firstName, lastName, email, password } = req.body;
             const errors = validationResult(req);
@@ -68,31 +67,43 @@ exports.loginGet = (req, res, next) => {
 }
 
 // POST request for loging into an existing account
-exports.loginPost = async (req, res, next) => {
-    try {
-        const { email, password } = req.body;
+exports.loginPost = [
+    body('email', 'Not an email').isEmail().normalizeEmail(),
+    body('password', 'Password must be at least 8 characters in length').isLength({ min: 8 }).escape(),
 
-        if (!(email && password)) {
-            res.status(400).send('All input is required');
+    async (req, res, next) => {
+        try {
+            const { email, password } = req.body;
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ statusCode: 400, errors: errors });
+            }
+
+            const user = await User.findOne({ where: { email: email }});
+
+            if (user && (await bcrypt.compare(password, user.password))) {
+                const token = jwt.sign(
+                    { user_id: user.id, email },
+                    process.env.JWT_SECRET,
+                    {
+                        expiresIn: process.env.JWT_EXPIRES_IN
+                    }
+                );
+                res.cookie('token', token, { httpOnly: true });
+
+                return res.status(200).json(user);
+            }
+
+            return res.status(400).json({ statusCode: 400, errors: 'Invalid credentials' });
+        } catch(err) {
+            console.log(err);
         }
-
-        const user = await User.findOne({ where: { email: email }});
-
-        if (user && (await bcrypt.compare(password, user.password))) {
-            const token = jwt.sign(
-                { user_id: user.id, email },
-                process.env.JWT_SECRET,
-                {
-                    expiresIn: process.env.JWT_EXPIRES_IN
-                }
-            );
-            res.cookie('token', token, { httpOnly: true });
-
-            return res.status(200).json(user);
-        }
-
-        res.status(400).send('Invalid credentials');
-    } catch(err) {
-        console.log(err);
     }
+];
+
+// GET request for getting a user
+exports.userGet = async (req, res, next) => {
+    console.log(req.user);
+    res.status(200).json({ statusCode: 200, user: req.user });
 }

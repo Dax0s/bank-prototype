@@ -6,7 +6,7 @@ const userController = require('../controllers/userController');
 const auth = require('../middleware/auth');
 
 /* GET users listing. */
-router.get('/', auth.verifyToken, userController.indexPage);
+router.get('/', auth.verifyToken, userController.userGet);
 
 router.get('/register', userController.registerGet);
 router.post('/register', userController.registerPost);

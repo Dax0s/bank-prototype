@@ -6,11 +6,16 @@ const Register = () => {
     const [ lastName, setLastName ] = useState('');
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ confirmPassword, setConfirmPassword] = useState('');
     
     const navigate = useNavigate();
 
     async function onSubmit(e) {
         e.preventDefault();
+
+        if (password !== confirmPassword) {
+            return alert('Password and confirm password do not match');
+        }
 
         const res = await fetch('/api/users/register', {
             method: 'POST',
@@ -47,6 +52,11 @@ const Register = () => {
                 <div>
                     <label htmlFor='password'>Password: </label>
                     <input type='password' value={password} placeholder='********' name='password' onChange={e => setPassword(e.target.value)}></input>
+                </div>
+
+                <div>
+                    <label htmlFor='confirmPassword'>Confirm Password: </label>
+                    <input type='password' value={confirmPassword} placeholder='********' name='confirmPassword' onChange={e => setConfirmPassword(e.target.value)}></input>
                 </div>
 
                 <input type='submit' value='Register' className='btn no-left-margin' style={{ backgroundColor: 'steelblue' }} />
