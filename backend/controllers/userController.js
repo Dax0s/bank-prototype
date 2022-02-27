@@ -17,10 +17,7 @@ exports.registerGet = (req, res, next) => {
 // POST request for creating an account
 exports.registerPost = async (req, res, next) => {
     try {
-        let { firstName, lastName, email, password } = req.body;
-
-        firstName = 'none';
-        lastName = 'none';
+        const { firstName, lastName, email, password } = req.body;
 
         if (!(firstName && lastName && email && password)) {
             res.status(400).send('All inputs are required');
