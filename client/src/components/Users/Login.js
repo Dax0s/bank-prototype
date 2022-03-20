@@ -37,7 +37,9 @@ const Login = () => {
                     <input type='password' value={password} placeholder='********' name='password' onChange={e => setPassword(e.target.value)}></input>
                 </div>
 
-                <input type='submit' value='Login' className='btn no-left-margin' style={{ backgroundColor: 'steelblue' }} />
+                <div>
+                    <input type='submit' value='Login' className='btn no-left-margin' style={{ backgroundColor: 'steelblue' }} />
+                </div>
             </form>
         </div>
     );

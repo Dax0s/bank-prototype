@@ -19,9 +19,9 @@ const relations = require('../models/relations')(sequelize);
 
 // TESTING
 
-/*
 
-(async () => {
+
+// (async () => {
     // await sequelize.sync({ force: true });
 
     // const ted = await User.create({ first_name: 'Ted', last_name: 'Shroom', email: 'shroomted@gmail.com', password: 'testpassword' });
@@ -32,19 +32,21 @@ const relations = require('../models/relations')(sequelize);
     // transaction.setSender(ted);
     // transaction.setReceiver(bob);
 
-    // const domas = await User.findByPk('03af3e30-97f9-11ec-a9c2-2fb00b9544bd');
-    // const random = await User.findByPk('2a61b910-97f2-11ec-b252-3982cf468d49');
+    // const domas = await User.findByPk('2a61b910-97f2-11ec-b252-3982cf468d49');
+    // const random = await User.findByPk('3aacb680-97f2-11ec-b252-3982cf468d49');
 
-    // const transaction = await Transaction.create({ transaction_amount: 75 });
-    // const transaction1 = await Transaction.create({ transaction_amount: 69 });
+    // const transaction = await Transaction.create({ transaction_amount: 75, transaction_date: '2022-01-01' });
 
     // transaction.setSender(domas);
     // transaction.setReceiver(random);
 
-    // transaction1.setSender(domas);
-    // transaction1.setReceiver(random);
-})();
+    // for (let i = 0; i < 500; i++) {
+    //     const transaction = await Transaction.create({ transaction_amount: 75, transaction_date: '2022-01-01' });
 
-*/
+    //     transaction.setSender(domas);
+    //     transaction.setReceiver(random);
+    // }
+
+// })();
 
 module.exports = { User, Transaction };

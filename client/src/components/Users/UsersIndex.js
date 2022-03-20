@@ -17,7 +17,17 @@ const UsersIndex = () => {
             });
     
             if (res.status === 401) {
-                return navigate('/user/register');
+                try {
+                    const cookie = document.cookie
+                        .split('; ')
+                        .find(row => row.startsWith('registered='))
+                        .split('=')[1];
+
+                    return navigate('/user/login');
+                } catch (err) {
+                    return navigate('/user/register');
+                }
+                
             }
 
             setUser((await res.json()).user);

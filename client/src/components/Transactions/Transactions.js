@@ -9,7 +9,6 @@ const Transactions = () => {
         <Routes>
             <Route path='/' element={<TransactionsIndex />} />
             <Route path='/create' element={<Create />} />
-            <Route path='/sent' element={<Sent />} />
         </Routes>
     );
 }

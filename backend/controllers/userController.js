@@ -6,8 +6,18 @@ const { body, validationResult } = require('express-validator');
 
 require('dotenv').config();
 
+// GET request for index page
 exports.indexPage = (req, res, next) => {
     res.render('index', { title: 'Express', email: req.user.email });
+}
+
+// GET request for getting a user
+exports.userGet = async (req, res, next) => {
+    const user = await User.findOne({ where: { email: req.user.email }});
+
+    req.user.balance = user.balance;
+
+    res.status(200).json({ statusCode: 200, user: req.user });
 }
 
 // GET request for creating an account
@@ -53,6 +63,7 @@ exports.registerPost = [
                 }
             );
             res.cookie('token', token, { httpOnly: true });
+            res.cookie('registered');
 
             res.status(201).json(user);
         } catch (err) {
@@ -91,6 +102,7 @@ exports.loginPost = [
                     }
                 );
                 res.cookie('token', token, { httpOnly: true });
+                res.cookie('registered');
 
                 return res.status(200).json(user);
             }
@@ -101,15 +113,6 @@ exports.loginPost = [
         }
     }
 ];
-
-// GET request for getting a user
-exports.userGet = async (req, res, next) => {
-    const user = await User.findOne({ where: { email: req.user.email }});
-
-    req.user.balance = user.balance;
-
-    res.status(200).json({ statusCode: 200, user: req.user });
-}
 
 // POST request for logging out a user
 exports.logoutPost = (req, res, next) => {

@@ -1,9 +1,10 @@
-const Transaction = ({ sender, receiver, transactionAmount }) => {
+const Transaction = ({ sender, receiver, transactionAmount, transactionDate }) => {
     return (
         <div className='transaction'>
-            <h4>Sender: {sender}</h4>
+            <p><strong>Transaction amount: </strong>{transactionAmount}€</p>
+            <p>Sender: {sender}</p>
             <p>receiver: {receiver}</p>
-            <p>Transaction amount: {transactionAmount}</p>
+            <p>Date: {transactionDate}</p>
         </div>
     );
 }
