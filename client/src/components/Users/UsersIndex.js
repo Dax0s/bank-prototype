@@ -52,7 +52,9 @@ const UsersIndex = () => {
                 : 'Loading...'
             }
 
-            <div><Button color='crimson' onClick={logout} text='Logout' /></div>
+            <div>
+                <Button className={'no-left-margin'} color='crimson' onClick={logout} text='Logout' />
+            </div>
         </div>
     );
 }
