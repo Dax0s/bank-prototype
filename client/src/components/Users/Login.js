@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
+
+    const [emailError, setEmailError] = useState('');
+    const [credentialError, setCredentialError] = useState('');
     
     const navigate = useNavigate();
 
@@ -18,29 +21,71 @@ const Login = () => {
             body: JSON.stringify({ email, password })
         });
 
+        const data = await res.json();
+        try {
+            const errors = data.errors.errors;
+
+            if (errors) {
+                for (const error of errors) {
+                    if (error.param === 'email') {
+                        setEmailError(error.msg);
+                    }
+                }
+            } 
+            
+        } catch (err) {
+            setEmailError('');
+        }
+
+        const credentialErrorData = data.credentialError;
+
+        if (credentialErrorData) {
+            setCredentialError(credentialErrorData);
+        } else {
+            setCredentialError('');
+        }
+
         if (res.status === 200) {
             navigate('/user');
         }
     }
 
     return (
-        <div className='container'>
-            <h1>Login</h1>
-            <form onSubmit={onSubmit}>
-                <div>
-                    <label htmlFor='email'>Email: </label>
-                    <input type='text' value={email} placeholder='example@email.com' name='email' onChange={e => setEmail(e.target.value)}></input>
-                </div>
+        <div id='wrap' className='input'>
+            <header className='input-header'>
+                <h1>Welcome back</h1>
+            </header>
+            <section className='input-content'>
 
-                <div>
-                    <label htmlFor='password'>Password: </label>
-                    <input type='password' value={password} placeholder='********' name='password' onChange={e => setPassword(e.target.value)}></input>
-                </div>
+                <h2>Login</h2>
+                
+                <form className='input-content-wrap'onSubmit={onSubmit} >
 
-                <div>
-                    <input type='submit' value='Login' className='btn no-left-margin' style={{ backgroundColor: 'steelblue' }} />
-                </div>
-            </form>
+                    <dl className='inputbox'>
+                        <dt className='inputbox-title'>Email</dt>
+                        <dd className='inputbox-content'>
+                            <input id='email' name='email' type='text' value={email} onChange={e => setEmail(e.target.value)} required/>
+                            <label htmlFor='email'>Email</label>
+                            <span className='underline'></span>
+                        </dd>
+                        <div className='wrong-input'>{emailError}</div>
+                    </dl>
+
+                    <dl className='inputbox'>
+                        <dt className='inputbox-title'>Password</dt>
+                        <dd className='inputbox-content'>
+                            <input id='password' name='password' type='password' value={password} onChange={e => setPassword(e.target.value)} required/>
+                            <label htmlFor='password'>Password</label>
+                            <span className='underline'></span>
+                        </dd>
+                    </dl>
+                    
+                    <div className='btns'>
+                        <input type='submit' value='Sign In' className='btn btn-confirm no-left-margin' />
+                        <div className='wrong-input'>{credentialError}</div>
+                    </div>
+                </form>
+            </section>
         </div>
     );
 }

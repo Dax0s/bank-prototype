@@ -7,15 +7,15 @@ const Register = () => {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ confirmPassword, setConfirmPassword] = useState('');
+
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState('');
     
     const navigate = useNavigate();
 
     async function onSubmit(e) {
         e.preventDefault();
-
-        if (password !== confirmPassword) {
-            return alert('Password and confirm password do not match');
-        }
 
         const res = await fetch('/api/user/register', {
             method: 'POST',
@@ -25,42 +25,116 @@ const Register = () => {
             body: JSON.stringify({ firstName, lastName, email, password })
         });
 
+        const data = await res.json();
+        
+        try {
+            const errors = data.errors.errors;
+
+            let emailErrorExists = false;
+            let passwordErrorExists = false;
+
+            if (errors) {
+                for (const error of errors) {
+                    if (error.param === 'email') {
+                        emailErrorExists = true;
+                        setEmailError(error.msg);
+                    }
+
+                    if (error.param === 'password') {
+                        passwordErrorExists = true;
+                        setPasswordError(error.msg);
+                    }
+                }
+            }
+
+            if (!emailErrorExists) {
+                setEmailError('');
+            }
+
+            if (!passwordErrorExists) {
+                setPasswordError('');
+            }
+
+        } catch (err) {
+            setEmailError('');
+            setPasswordError('');
+        }
+
+        if (password !== confirmPassword) {
+            return setConfirmPasswordError('Password and confirm password must match')
+        } else {
+            setConfirmPasswordError('');
+        }
+
         if (res.status === 201) {
             navigate('/user');
         }
     }
 
     return (
-        <div className='container'>
-            <h1>Registration</h1>
-            <form onSubmit={onSubmit}>
-                <div>
-                    <label htmlFor='firstName'>Name: </label>
-                    <input type='text' value={firstName} placeholder='Name' name='firstName' onChange={e => setName(e.target.value)}></input>
-                </div>
+        <div id='wrap' className='input'>
+            <header className='input-header'>
+                <h1>Welcome!</h1>
+            </header>
+            <section className='input-content'>
 
-                <div>
-                    <label htmlFor='lastName'>Surname: </label>
-                    <input type='text' value={lastName} placeholder='Surname' name='lastName' onChange={e => setLastName(e.target.value)}></input>
-                </div>
+                <h2>Register</h2>
+                
+                <form className='input-content-wrap'onSubmit={onSubmit} >
+                    
+                    <dl className='inputbox'>
+                        <dt className='inputbox-title'>Name</dt>
+                        <dd className='inputbox-content'>
+                            <input id='firstName' name='firstName' type='text' value={firstName} onChange={e => setName(e.target.value)} required/>
+                            <label htmlFor='firstName'>Name</label>
+                            <span className='underline'></span>
+                        </dd>
+                    </dl>
 
-                <div>
-                    <label htmlFor='email'>Email: </label>
-                    <input type='text' value={email} placeholder='example@email.com' name='email' onChange={e => setEmail(e.target.value)}></input>
-                </div>
+                    <dl className='inputbox'>
+                        <dt className='inputbox-title'>Surname</dt>
+                        <dd className='inputbox-content'>
+                            <input id='lastName' name='lastName' type='text' value={lastName} onChange={e => setLastName(e.target.value)} required/>
+                            <label htmlFor='lastName'>Surname</label>
+                            <span className='underline'></span>
+                        </dd>
+                    </dl>
 
-                <div>
-                    <label htmlFor='password'>Password: </label>
-                    <input type='password' value={password} placeholder='********' name='password' onChange={e => setPassword(e.target.value)}></input>
-                </div>
+                    <dl className='inputbox'>
+                        <dt className='inputbox-title'>Email</dt>
+                        <dd className='inputbox-content'>
+                            <input id='email' name='email' type='text' value={email} onChange={e => setEmail(e.target.value)} required/>
+                            <label htmlFor='email'>Email</label>
+                            <span className='underline'></span>
+                        </dd>
+                        <div className='wrong-input'>{emailError}</div>
+                    </dl>
 
-                <div>
-                    <label htmlFor='confirmPassword'>Confirm Password: </label>
-                    <input type='password' value={confirmPassword} placeholder='********' name='confirmPassword' onChange={e => setConfirmPassword(e.target.value)}></input>
-                </div>
+                    <dl className='inputbox'>
+                        <dt className='inputbox-title'>Password</dt>
+                        <dd className='inputbox-content'>
+                            <input id='password' name='password' type='password' value={password} onChange={e => setPassword(e.target.value)} required/>
+                            <label htmlFor='password'>Password</label>
+                            <span className='underline'></span>
+                        </dd>
+                        <div className='wrong-input'>{passwordError}</div>
+                    </dl>
 
-                <input type='submit' value='Register' className='btn no-left-margin' style={{ backgroundColor: 'steelblue' }} />
-            </form>
+                    <dl className='inputbox'>
+                        <dt className='inputbox-title'>Confirm Password</dt>
+                        <dd className='inputbox-content'>
+                            <input id='confirmPassword' name='confirmPassword' type='password' value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required/>
+                            <label htmlFor='confirmPassword'>Confirm Password</label>
+                            <span className='underline'></span>
+                        </dd>
+                        <div className='wrong-input'>{confirmPasswordError}</div>
+                    </dl>
+                    
+                    <div className='btns'>
+                        <input type='submit' value='Register' className='btn btn-confirm no-left-margin' />
+                    </div>
+                </form>
+            </section>
         </div>
     );
 }

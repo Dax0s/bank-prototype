@@ -80,7 +80,6 @@ exports.loginGet = (req, res, next) => {
 // POST request for loging into an existing account
 exports.loginPost = [
     body('email', 'Not an email').isEmail().normalizeEmail(),
-    body('password', 'Password must be at least 8 characters in length').isLength({ min: 8 }).escape(),
 
     async (req, res, next) => {
         try {
@@ -107,7 +106,7 @@ exports.loginPost = [
                 return res.status(200).json(user);
             }
 
-            return res.status(400).json({ statusCode: 400, errors: 'Invalid credentials' });
+            return res.status(400).json({ statusCode: 400, credentialError: 'Invalid credentials' });
         } catch(err) {
             console.log(err);
         }
