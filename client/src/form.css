@@ -132,6 +132,7 @@ html, body {
 }
 
 .wrong-input {
+  position: absolute;
   padding-top: 4px;
   color: #de453c;
 }

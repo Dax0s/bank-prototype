@@ -6,7 +6,10 @@ const Create = () => {
 
     const [email, setEmail] = useState('');
     const [amount, setAmount] = useState('');
-    const [user, setUser] = useState();
+
+    const [emailError, setEmailError] = useState('');
+    const [amountError, setAmountError] = useState('');
+
 
     useEffect(() => {
         async function fetchUser() {
@@ -18,8 +21,6 @@ const Create = () => {
             });
 
             if (res.status === 401) return navigate('/user');
-
-            setUser((await res.json()).user);
         }
 
         fetchUser();
@@ -29,9 +30,9 @@ const Create = () => {
         e.preventDefault();
         
         if ((amount - 0) === 0) {
-            return console.log('Enter a value bigger than 0');
-        }
-        
+            return setAmountError('Enter a value bigger than 0');
+        } 
+
         const res = await fetch('/api/transaction/create', {
             method: 'POST',
             headers: {
@@ -39,30 +40,68 @@ const Create = () => {
             },
             body: JSON.stringify({ email, amount })
         });
+        
+        const data = await res.json();
 
-        if (res.status === 400) console.log((await res.json()).errors);
-        if (res.status === 403) console.log((await res.json()).errors);
+        try {
+            const error = data.error;
+
+            if (error.param === 'balance') {
+                setAmountError(error.msg);
+            } else {
+                setAmountError('');
+            }
+
+            if (error.param !== 'balance') {
+                setEmailError(error.msg);
+            } else {
+                setEmailError('');
+            }
+
+        } catch (err) {
+            setAmountError('');
+            setEmailError('');
+        }
+
         if (res.status === 200) return navigate('/transaction');
     }
 
     return (
-        <div className='container'>
-            <h1>New transaction</h1>
-            <form onSubmit={onSubmit}>
-                <div>
-                    <label htmlFor='email'>To: </label>
-                    <input type='text' value={email} placeholder='example@email.com' name='email' onChange={e => setEmail(e.target.value)}></input>
-                </div>
+        <div id='wrap' className='input'>
+            <header className='input-header'>
+                <h1>New transaction</h1>
+            </header>
+            <section className='input-content'>
 
-                <div>
-                    <label htmlFor='amount'>Amount: </label>
-                    <input type='number' value={amount} placeholder='100.00' name='amount' min='0' step='0.01' onChange={e => setAmount(e.target.value)}></input>
-                </div>
+                <h2>Create a new transaction</h2>
+                
+                <form className='input-content-wrap'onSubmit={onSubmit} >
+                    
+                    <dl className='inputbox'>
+                        <dt className='inputbox-title'>Email</dt>
+                        <dd className='inputbox-content'>
+                            <input id='email' name='email' type='text' value={email} onChange={e => setEmail(e.target.value)} required/>
+                            <label htmlFor='email'>Email</label>
+                            <span className='underline'></span>
+                        </dd>
+                        <div className='wrong-input'>{emailError}</div>
+                    </dl>
 
-                <div>
-                    <input type='submit' value='Send' className='btn no-left-margin' style={{ backgroundColor: 'steelblue' }} />
-                </div>
-            </form>
+                    <dl className='inputbox'>
+                        <dt className='inputbox-title'>Amount</dt>
+                        <dd className='inputbox-content'>
+                            <input id='amount' name='amount' type='number' min='0' step='0.01' value={amount} onChange={e => setAmount(e.target.value)} required/>
+                            <label htmlFor='amount'>Amount</label>
+                            <span className='underline'></span>
+                        </dd>
+                        <div className='wrong-input'>{amountError}</div>
+                    </dl>
+
+                    <div className='btns'>
+                        <input type='submit' value='Send' className='btn btn-confirm no-left-margin' />
+                    </div>
+                </form>
+            </section>
         </div>
     );
 }

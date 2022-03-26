@@ -48,7 +48,7 @@ const UsersIndex = () => {
         <div className='container'>
             {
                 user
-                ? <div><p>Welcome {user.email}</p><p>Balance: ${Math.round((user.balance) * 100) / 100}€</p></div>
+                ? <div><p>Welcome {user.email}</p><p>Balance: {Math.round((user.balance) * 100) / 100}€</p></div>
                 : 'Loading...'
             }
 

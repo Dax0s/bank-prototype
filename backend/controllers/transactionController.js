@@ -8,7 +8,7 @@ exports.transactionsGet = async (req, res, next) => {
     try {
         console.log(req.query);
 
-        const transactions = await Transaction.findAll({ where: { senderId: req.user.user_id, transaction_date: { [Op.between]: [req.query.startDate, req.query.endDate] }}});
+        const transactions = await Transaction.findAll({ where: { [Op.or]: [{ senderId: req.user.user_id }, { receiverId: req.user.user_id } ], transaction_date: { [Op.between]: [req.query.startDate, req.query.endDate] }}});
 
         let newTransactions = await Promise.all(transactions.map(async transaction => (
             { 
@@ -35,7 +35,6 @@ exports.transactionsCreateGet = async (req, res, next) => {
 // POST request for creating a new transaction
 exports.transactionsCreatePost = [
     body('email', 'Not an email').isEmail().normalizeEmail(),
-    body('amount', 'Transaction amount can\'t be empty').isLength({ min: 1 }),
     async (req, res, next) => {
         try {
             let { email, amount } = req.body;
@@ -44,22 +43,37 @@ exports.transactionsCreatePost = [
             const errors = validationResult(req);
 
             if (!errors.isEmpty())
-                return res.status(400).json({ statusCode: 400, errors: errors });
+                return res.status(400).json({ statusCode: 400, error: errors.errors[0] });
 
             if (email === req.user.email) {
-                return res.status(400).json({ statusCode: 400, errors: 'You can\'t send money to yourself' });
+                const error = {
+                    param: 'yourEmail',
+                    msg: 'You can\'t send money to yourself'
+                }
+
+                return res.status(400).json({ statusCode: 400, error: error });
             }
 
             const user = await User.findByPk(req.user.user_id);
             
             if (user.balance < amount) {
-                return res.status(403).json({ statusCode: 403, errors: 'Your balance is too low' });
+                const error = {
+                    param: 'balance',
+                    msg: 'Your balance is too low'
+                }
+
+                return res.status(403).json({ statusCode: 403, error: error });
             }
 
             try {
                 const receivingUser = await User.findOne({where: { email: email }});
                 if (receivingUser === null) {
-                    return res.status(400).json({ statusCode: 400, errors: 'No such user exists' });
+                    const error = {
+                        param: 'noUser',
+                        msg: 'No such user exists'
+                    }
+
+                    return res.status(400).json({ statusCode: 400, error: error });
                 }
                 receivingUser.balance = parseFloat(receivingUser.balance);
 
