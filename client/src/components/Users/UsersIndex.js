@@ -30,7 +30,10 @@ const UsersIndex = () => {
                 
             }
 
-            setUser((await res.json()).user);
+            const data = await res.json();
+
+            setUser(data.user);
+            console.log(data.user)
         }
 
         fetchUser();
@@ -44,17 +47,28 @@ const UsersIndex = () => {
         navigate('/user/login');
     }
 
-    return (
-        <div className='container'>
-            {
-                user
-                ? <div><p>Welcome {user.email}</p><p>Balance: {Math.round((user.balance) * 100) / 100}€</p></div>
-                : 'Loading...'
-            }
+    if (!user) {
+        return (
+            <div></div>
+        )
+    }
 
-            <div>
-                <Button className={'no-left-margin'} color='crimson' onClick={logout} text='Logout' />
-            </div>
+    return (
+        <div id='wrap' className='input'>
+            <header className='input-header'>
+                <h1>User page</h1>
+            </header>
+            <section className='input-content'>
+
+                <h2>Welcome {user.name}</h2>
+
+                <div>
+                    <p>Your balance: {Math.round((user.balance) * 100) / 100}€</p>
+                    <p>Email: {user.email}</p>
+                </div>
+
+                <Button className='btn btn-confirm no-left-margin' color={'crimson'} onClick={logout} text='Logout' />
+            </section>
         </div>
     );
 }

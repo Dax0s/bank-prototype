@@ -17,7 +17,13 @@ exports.userGet = async (req, res, next) => {
 
     req.user.balance = user.balance;
 
-    res.status(200).json({ statusCode: 200, user: req.user });
+    const resUser = {
+        balance: user.balance,
+        name: user.name,
+        email: user.email
+    }
+
+    res.status(200).json({ statusCode: 200, user: resUser });
 }
 
 // GET request for creating an account
@@ -43,7 +49,11 @@ exports.registerPost = [
             const oldUser = await User.findOne({ where: { email: email } });
 
             if (oldUser) {
-                return res.status(409).json({ statusCode: 409, message: 'User Already Exists. Please Login' });
+                const error = [{
+                    param: 'exists',
+                    msg: 'User Already Exists. Please Login'
+                }]
+                return res.status(409).json({ statusCode: 409, errors: error });
             }
 
             const encryptedPassword = await bcrypt.hash(password, 10);

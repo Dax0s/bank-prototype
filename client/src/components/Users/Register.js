@@ -11,6 +11,8 @@ const Register = () => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
+    const [userExistsError, setUserExistsError] = useState('');
+
     
     const navigate = useNavigate();
 
@@ -64,6 +66,12 @@ const Register = () => {
             return setConfirmPasswordError('Password and confirm password must match')
         } else {
             setConfirmPasswordError('');
+        }
+
+        if (res.status === 409) {
+            setUserExistsError('Email is already in use');
+        } else {
+            setUserExistsError('');
         }
 
         if (res.status === 201) {
@@ -132,6 +140,7 @@ const Register = () => {
                     
                     <div className='btns'>
                         <input type='submit' value='Register' className='btn btn-confirm no-left-margin' />
+                        <div className='wrong-input'>{userExistsError}</div>
                     </div>
                 </form>
             </section>
