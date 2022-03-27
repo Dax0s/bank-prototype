@@ -137,4 +137,12 @@ html, body {
   color: #de453c;
 }
 
+.date-input {
+  display: inline-block;
+}
+.date-input label, .date-input input {
+  display: block;
+  margin: 5px;
+}
+
 /*# sourceMappingURL=form.css.map */

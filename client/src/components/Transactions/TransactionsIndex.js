@@ -66,31 +66,65 @@ const TransactionsIndex = () => {
     }
 
     return (
-        <div className='container'>
-            <h1>Transactions</h1>
-            <form onSubmit={onSubmit}>
-                <div>
-                    <label htmlFor='startDate'>Start date: </label>
-                    <input type="date" name='startDate' value={startDate ? startDate : currentDate} onChange={e => e.target.value > endDate ? setStartDate(endDate) : setStartDate(e.target.value)} />
-                </div>
+        // <div className='container'>
+        //     <h1>Transactions</h1>
+        //     <form onSubmit={onSubmit}>
+        //         <div>
+        //             <label htmlFor='startDate'>Start date: </label>
+        //             <input type="date" name='startDate' value={startDate ? startDate : currentDate} onChange={e => e.target.value > endDate ? setStartDate(endDate) : setStartDate(e.target.value)} />
+        //         </div>
 
-                <div>
-                    <label htmlFor='endDate'>End date: </label>
-                    <input type="date" name='endDate' value={endDate ? endDate : currentDate} onChange={e => endDateChange(e.target.value)} />
-                </div>
+        //         <div>
+        //             <label htmlFor='endDate'>End date: </label>
+        //             <input type="date" name='endDate' value={endDate ? endDate : currentDate} onChange={e => endDateChange(e.target.value)} />
+        //         </div>
 
-                <div>
-                    <input type='submit' value='Set date' className='no-left-margin' />
-                </div>
-            </form>
+        //         <div>
+        //             <input type='submit' value='Set date' className='no-left-margin' />
+        //         </div>
+        //     </form>
 
-            {
-                transactions
-                ? transactions.map((transaction, index) => (
-                    <Transaction key={index} sender={transaction.senderEmail} receiver={transaction.receiverEmail} transactionAmount={transaction.transactionAmount} transactionDate={transaction.transactionDate} />
-                ))
-                : 'No transactions'
-            }
+            // {
+            //     transactions
+            //     ? transactions.map((transaction, index) => (
+            //         <Transaction key={index} sender={transaction.senderEmail} receiver={transaction.receiverEmail} transactionAmount={transaction.transactionAmount} transactionDate={transaction.transactionDate} />
+            //     ))
+            //     : 'No transactions'
+            // }
+        // </div>
+
+        <div id='wrap' className='input'>
+            <header className='input-header'>
+                <h1>Transactions</h1>
+            </header>
+            <section className='input-content'>
+
+                <h2 style={{paddingBottom: '25px'}}>Transaction history</h2>
+                
+                <form onSubmit={onSubmit}>
+                    <div className='date-input'>
+                        <label htmlFor='startDate'>Start date</label>
+                        <input id='startDate' name='startDate' type='date' value={startDate ? startDate : currentDate} onChange={e => e.target.value > endDate ? setStartDate(endDate) : setStartDate(e.target.value)} required/>
+                    </div>
+
+                    <div className='date-input'>
+                        <label htmlFor='endDate'>End date</label>
+                        <input id='endDate' name='endDate' type='date' value={endDate ? endDate : currentDate} onChange={e => endDateChange(e.target.value)} required/>
+                    </div>
+
+                    <div>
+                        <input type='submit' style={{padding: '5px', fontSize: '15px', backgroundColor: '#0f1041'}} value='Set date' className='btn btn-confirm' />
+                    </div>
+                </form>
+                
+                {
+                    transactions
+                    ? transactions.map((transaction, index) => (
+                        <Transaction key={index} sender={transaction.senderEmail} receiver={transaction.receiverEmail} transactionAmount={transaction.transactionAmount} transactionDate={transaction.transactionDate} />
+                    ))
+                    : 'No transactions'
+                }
+            </section>
         </div>
     );
 }

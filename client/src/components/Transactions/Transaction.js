@@ -3,7 +3,7 @@ const Transaction = ({ sender, receiver, transactionAmount, transactionDate }) =
         <div className='transaction'>
             <p><strong>Transaction amount: </strong>{transactionAmount}€</p>
             <p>Sender: {sender}</p>
-            <p>receiver: {receiver}</p>
+            <p>Recipient: {receiver}</p>
             <p>Date: {transactionDate}</p>
         </div>
     );

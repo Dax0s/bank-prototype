@@ -150,3 +150,12 @@ html,body{
     padding-top: 4px;
     color: rgb(222, 69, 60);
 }
+
+.date-input {
+    display: inline-block;
+
+    label, input {
+        display: block;
+        margin: 5px;
+    }
+}
