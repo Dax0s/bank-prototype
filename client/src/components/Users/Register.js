@@ -138,7 +138,7 @@ const Register = () => {
                         <div className='wrong-input'>{confirmPasswordError}</div>
                     </dl>
                     
-                    <div className='btns'>
+                    <div className='btns' style={{paddingTop: '0'}}>
                         <input type='submit' value='Register' className='btn btn-confirm no-left-margin' />
                         <div className='wrong-input'>{userExistsError}</div>
                     </div>

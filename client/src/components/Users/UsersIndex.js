@@ -62,7 +62,7 @@ const UsersIndex = () => {
 
                 <h2 style={{paddingBottom: '10px'}}>Welcome {user.name}</h2>
 
-                <div style={{paddingBottom: '10px'}}>
+                <div>
                     <p>Your balance: {Math.round((user.balance) * 100) / 100}€</p>
                     <p>Email: {user.email}</p>
                 </div>

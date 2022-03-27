@@ -80,7 +80,7 @@ const Login = () => {
                         </dd>
                     </dl>
                     
-                    <div className='btns'>
+                    <div className='btns' style={{paddingTop: '0'}}>
                         <input type='submit' value='Sign In' className='btn btn-confirm no-left-margin' />
                         <div className='wrong-input'>{credentialError}</div>
                     </div>

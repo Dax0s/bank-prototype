@@ -97,7 +97,7 @@ const Create = () => {
                         <div className='wrong-input'>{amountError}</div>
                     </dl>
 
-                    <div className='btns'>
+                    <div className='btns' style={{paddingTop: '0'}}>
                         <input type='submit' value='Send' className='btn btn-confirm no-left-margin' />
                     </div>
                 </form>
