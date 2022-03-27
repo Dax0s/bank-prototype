@@ -60,9 +60,9 @@ const UsersIndex = () => {
             </header>
             <section className='input-content'>
 
-                <h2>Welcome {user.name}</h2>
+                <h2 style={{paddingBottom: '10px'}}>Welcome {user.name}</h2>
 
-                <div>
+                <div style={{paddingBottom: '10px'}}>
                     <p>Your balance: {Math.round((user.balance) * 100) / 100}€</p>
                     <p>Email: {user.email}</p>
                 </div>
